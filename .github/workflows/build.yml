@@ -1,32 +1,19 @@
-name: Build (fx-cp)
-
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
-
+name: Build SuperH
+on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # Run all steps inside your GHCR image
     container:
       image: ghcr.io/therainbowphoenix/gint-docker:main
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+      - run: python3 tools/generate_tables.py
+      - run: sh tools/build_sh4.sh
+      - run: sh tools/build_addin.sh
+      - uses: actions/upload-artifact@v4
         with:
-          fetch-depth: 0
-
-      - name: Build (fxsdk build-cp)
-        run: |
-          fxsdk build-cp
-
-      - name: Upload MyAddin.hh3
-        uses: actions/upload-artifact@v4
-        with:
-          name: MyAddin.hh3
-          path: MyAddin.hh3
-          if-no-files-found: error
-          retention-days: 14
+          name: DCC-SuperH
+          path: |
+            DCC-SuperH.hh3
+            build-sh4/*.elf
+            build-sh4/libdcc.a

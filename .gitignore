@@ -1,12 +1,6 @@
-# Build files
-/build*/
-/*.g1a
-/*.g3a
-/*.hh3
-
-# Python bytecode
+build*/
+*.hh3
+*.g1a
+*.g3a
 __pycache__/
-
-# Common IDE files
-*.sublime-project
-*.sublime-workspace
+compile_commands.json
